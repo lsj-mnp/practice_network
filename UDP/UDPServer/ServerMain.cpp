@@ -1,4 +1,5 @@
 ﻿#include "CUDPServer.h"
+#include <Windows.h>
 
 int main()
 {
@@ -23,6 +24,9 @@ int main()
 			{
 				if (server.Receive())
 				{
+					//\n = 개행문자. 행을 여는 문자라는 의미임.
+					OutputDebugStringA("receive 성공함\n");
+
 					printf("%s\n", server.GetBuff());
 				}
 			}

@@ -2,8 +2,8 @@
 
 #include <WinSock2.h>
 #pragma comment (lib, "ws2_32.lib")
-#include <iostream>
 #include <WS2tcpip.h>
+#include <iostream>
 #include <thread>
 
 class CUDPClient
@@ -41,7 +41,7 @@ private:
 			printf("에러코드: %d", WSAGetLastError());
 		}
 
-		//직접 호출을 안 해도 프로세스가 종료되면 윈도우즈가 알아서 호출해줌.
+		//사실 직접 호출을 안 해도 프로세스가 종료되면 윈도우즈가 알아서 호출해줌.
 		//cleanup을 안 하고 이후 startup을 호출하면 안됨.
 		int error{ WSACleanup() };
 
@@ -105,6 +105,8 @@ public:
 		
 		if (received_byte_count > 0)
 		{
+			OutputDebugStringA("Client 에서 Server의 Data를 receive 하는데 성공함\n");
+
 			m_buff[received_byte_count - 1] = 0;
 
 			return true;
@@ -127,6 +129,8 @@ public:
 
 		if (sent_byte_count > 0)
 		{
+			OutputDebugStringA("Server에 Data를 보내는데 성공함\n");
+
 			return true;
 		}
 

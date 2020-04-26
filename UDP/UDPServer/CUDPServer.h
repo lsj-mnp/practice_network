@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <WinSock2.h>
 #pragma comment (lib, "ws2_32.lib")
@@ -183,6 +183,8 @@ public:
 
 		if (received_byte_count > 0)
 		{
+			OutputDebugStringA("client의 Data를 receive 하는데 성공함\n");
+
 			for (const auto& client : m_v_clients)
 			{
 				//중복 ip 주소 확인.
@@ -220,16 +222,17 @@ public:
 			++message_size;
 		}*/
 
-		bool failed{};
+		bool success{};
 
 		while (m_q_joinningClientsAddr.size() > 0)
 		{
-			//참조형은 원래 참조를 못 바꿈. 
-			const sockaddr_in& joined_client_addr = m_q_joinningClientsAddr.front();
+			OutputDebugStringA("새 client를 추가함. \n");
+
+			sockaddr_in joined_client_addr = m_q_joinningClientsAddr.front();
+
+			m_q_joinningClientsAddr.pop();
 
 			m_v_clients.emplace_back(joined_client_addr);
-			
-			m_q_joinningClientsAddr.pop();
 		}
 
 		//여러 쓰레드가 1. 공통된 공간에 2. 동시에 3. 한 번이라도 쓰기연산을 할 경우에만 race condition
@@ -242,13 +245,15 @@ public:
 
 			if (sent_byte_count > 0)
 			{
-				failed = true;
+				OutputDebugStringA("client에 data를 보내는데 성공함.\n");
+
+				success = true;
 			}
 		}
 
 		//m_mtx.unlock();
 
-		return failed;
+		return success;
 	}
 
 private:
