@@ -197,6 +197,7 @@ public:
 
 			//std::mutex::lock() = lock이 가능할 때까지 계속 대기함.
 			//dead lock = 대기하는 lock이 중복 발생할 경우 무한 대기상태가 됨.
+			//두 개의 lock중인 스레드가 서로 접근하려고 할 때 발생함.
 			
 			//m_mtx.lock();
 
